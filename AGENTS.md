@@ -210,6 +210,10 @@ backends, providers, notifiers), don't merge them one at a time — design an
 ABC + orchestrator, wrap the existing built-in as the first provider, and turn
 the competing PRs into plugins against that interface.
 
+## Local model context floor
+
+Hermes refuses models whose context is below `MINIMUM_CONTEXT_LENGTH` (64,000 tokens, `agent/model_metadata.py`; checked in `cli.py` and `agent/conversation_loop.py`). For local Ollama models set `num_ctx` and `model.context_length` to 65536 everywhere they are configured, or the agent will not start. The JonnyAI estate does this in `apply-to-hermes.ps1` (`model.context_length` 65536) in agent-hub-conductor. (learning `4501a537`, floor and setting checked on disk 01/10/2026)
+
 ## Development Environment
 
 ```bash
