@@ -1216,6 +1216,14 @@ automatically scope to the active profile.
 
 ## Known Pitfalls
 
+### Models under 64K context are rejected at start
+`MINIMUM_CONTEXT_LENGTH = 64_000` (`agent/model_metadata.py`) is enforced in
+`agent/agent_init.py`: a resolved context below it aborts agent start with a
+"below the minimum" error. For Ollama and other local servers the window is set
+by the server (`num_ctx`), so any deployment profile must keep both the server
+`num_ctx` and the Hermes `context_length` at or above 65536 or the agent will
+not start (learning `4501a537`; floor and check confirmed in source 05/10/2026).
+
 ### DO NOT hardcode `~/.hermes` paths
 Use `get_hermes_home()` from `hermes_constants` for code paths. Use `display_hermes_home()`
 for user-facing print/log messages. Hardcoding `~/.hermes` breaks profiles — each profile
