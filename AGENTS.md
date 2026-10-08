@@ -221,6 +221,16 @@ source .venv/bin/activate   # or: source venv/bin/activate
 `$HOME/.hermes/hermes-agent/venv` (for worktrees that share a venv with the
 main checkout).
 
+## Ollama Context Floor
+
+Hermes refuses Ollama models whose runtime context is below `MINIMUM_CONTEXT_LENGTH`
+(64,000 tokens, `agent/model_metadata.py`); `agent/conversation_loop.py` logs
+"Ollama runtime context too small for Hermes tool use" when `_ollama_num_ctx` is under it.
+Any Ollama-backed profile (e.g. `jaios-work`, `godmode`) must keep `num_ctx` and the config
+`context_length` at 65536 wherever they are set, or the agent fails on next start
+(learning `4501a537`; the 64,000 floor is verified on disk, the per-profile apply points live
+outside this repo and are not checked here).
+
 ## Project Structure
 
 File counts shift constantly — don't treat the tree below as exhaustive.
